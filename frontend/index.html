@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORE-AUTH | Premium Identity Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="app">
+    <div class="background-blobs">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+
+    <main class="container">
+      <header class="logo-section">
+        <h1 class="glitch-text" data-text="CORE-AUTH">CORE-AUTH</h1>
+        <p class="subtitle">Secure. Asynchronous. Production-Ready.</p>
+      </header>
+
+      <!-- Auth Section -->
+      <section id="auth-section" class="glass-card">
+        <div class="tabs">
+          <button id="login-tab" class="tab-btn active">Login</button>
+          <button id="register-tab" class="tab-btn">Register</button>
+        </div>
+
+        <form id="login-form" class="auth-form">
+          <div class="input-group">
+            <label for="login-email">Email</label>
+            <input type="email" id="login-email" placeholder="dev@example.com" required>
+          </div>
+          <div class="input-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="submit-btn">Sign In</button>
+        </form>
+
+        <form id="register-form" class="auth-form hidden">
+          <div class="input-group">
+            <label for="reg-email">Email</label>
+            <input type="email" id="reg-email" placeholder="new-dev@example.com" required>
+          </div>
+          <div class="input-group">
+            <label for="reg-password">Password</label>
+            <input type="password" id="reg-password" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="submit-btn">Create Account</button>
+        </form>
+        
+        <div id="auth-message" class="message"></div>
+      </section>
+
+      <!-- Dashboard Section (Hidden by default) -->
+      <section id="dashboard-section" class="glass-card hidden">
+        <div class="dashboard-header">
+          <h2>Welcome back, <span id="user-email-display">Explorer</span></h2>
+          <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+        <div class="user-stats">
+          <div class="stat-item">
+            <span class="stat-label">Status</span>
+            <span class="stat-value active-status">Active</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Session Type</span>
+            <span class="stat-value">JWT Secure</span>
+          </div>
+        </div>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>System Logs</h3>
+                <p>View your latest authentication activity.</p>
+            </div>
+            <div class="action-card">
+                <h3>Security Settings</h3>
+                <p>Update your credentials and MFA.</p>
+            </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
