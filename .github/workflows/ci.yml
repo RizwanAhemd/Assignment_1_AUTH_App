@@ -51,13 +51,10 @@ jobs:
         pip install -r requirements.txt
 
     - name: Execute Ruff Linter Checks
-      run: ruff check src/
-
-    - name: Execute Black Formatter Style Verification
-      run: black --check src/ tests/
+      run: make lint
 
     - name: Execute Bandit Automated SAST Security Scan
-      run: bandit -r src/ -x tests/
+      run: make security
 
     - name: Run Pytest Async Automated Suites
       env:
@@ -71,7 +68,7 @@ jobs:
         REDIS_DB: 0
         JWT_ACCESS_SECRET: action_test_secret_key_abcdef12345
         JWT_REFRESH_SECRET: action_test_secret_key_54321fedcba
-      run: pytest -v --asyncio-mode=strict
+      run: make test
 
   validate-frontend:
     runs-on: ubuntu-latest

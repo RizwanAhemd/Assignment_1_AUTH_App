@@ -23,7 +23,7 @@ def create_token(subject: Any, expires_delta: timedelta, token_type: str) -> str
 
     secret = (
         settings.JWT_ACCESS_SECRET
-        if token_type == "access"
+        if token_type == "access"  # nosec B105
         else settings.JWT_REFRESH_SECRET
     )
     return jwt.encode(payload, secret, algorithm="HS256")
@@ -32,7 +32,7 @@ def create_token(subject: Any, expires_delta: timedelta, token_type: str) -> str
 def decode_token(token: str, token_type: str) -> Dict[str, Any]:
     secret = (
         settings.JWT_ACCESS_SECRET
-        if token_type == "access"
+        if token_type == "access"  # nosec B105
         else settings.JWT_REFRESH_SECRET
     )
     try:
