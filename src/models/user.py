@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
 from src.db.base import Base
 
+
 class User(Base):
     __tablename__ = "users"
 

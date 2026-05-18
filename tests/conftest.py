@@ -29,6 +29,7 @@ class FakeRedis:
     async def close(self) -> None:
         return
 
+
 # Config alternative async test connections
 TEST_DATABASE_URL = str(
     PostgresDsn.build(
@@ -41,6 +42,7 @@ TEST_DATABASE_URL = str(
     )
 )
 TEST_REDIS_URL = "redis://localhost:6379/1"
+
 
 async def ensure_test_db_exists() -> None:
     admin_url = str(
@@ -61,10 +63,12 @@ async def ensure_test_db_exists() -> None:
     finally:
         await conn.close()
 
+
 test_engine = create_async_engine(TEST_DATABASE_URL, poolclass=pool.NullPool)
 TestingSessionLocal = async_sessionmaker(
     bind=test_engine, class_=AsyncSession, expire_on_commit=False
 )
+
 
 @pytest_asyncio.fixture(scope="session", autouse=True)
 async def initialize_test_db():
@@ -76,10 +80,12 @@ async def initialize_test_db():
     async with test_engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
 
+
 @pytest_asyncio.fixture()
 async def db_session() -> AsyncGenerator[AsyncSession, None]:
     async with TestingSessionLocal() as session:
         yield session
+
 
 @pytest_asyncio.fixture()
 async def test_redis() -> AsyncGenerator[FakeRedis, None]:
@@ -88,8 +94,11 @@ async def test_redis() -> AsyncGenerator[FakeRedis, None]:
     await client.flushdb()
     await client.close()
 
+
 @pytest_asyncio.fixture()
-async def client(db_session: AsyncSession, test_redis: FakeRedis) -> AsyncGenerator[AsyncClient, None]:
+async def client(
+    db_session: AsyncSession, test_redis: FakeRedis
+) -> AsyncGenerator[AsyncClient, None]:
     # Override dependencies with async generator functions to match FastAPI expectations
     async def override_get_db():
         yield db_session

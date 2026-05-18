@@ -9,6 +9,7 @@ from src.models.user import User
 from src.repositories.user import UserRepository
 from src.schemas.user import UserCreate
 
+
 class AuthService:
     def __init__(self, db: AsyncSession, redis: Redis):
         self.user_repo = UserRepository(db)
@@ -19,12 +20,11 @@ class AuthService:
         if existing_user:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="User with this email already exists."
+                detail="User with this email already exists.",
             )
-        
+
         new_user = User(
-            email=user_in.email,
-            hashed_password=hash_password(user_in.password)
+            email=user_in.email, hashed_password=hash_password(user_in.password)
         )
         return await self.user_repo.create(new_user)
 
@@ -33,7 +33,7 @@ class AuthService:
         if not user or not verify_password(password, user.hashed_password):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Incorrect email or password."
+                detail="Incorrect email or password.",
             )
         if not user.is_active:
             raise HTTPException(
@@ -44,11 +44,11 @@ class AuthService:
     def generate_auth_tokens(self, user_id: int) -> dict:
         access_delta = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
         refresh_delta = timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
-        
+
         return {
             "access_token": create_token(user_id, access_delta, "access"),
             "refresh_token": create_token(user_id, refresh_delta, "refresh"),
-            "token_type": "bearer"
+            "token_type": "bearer",
         }
 
     async def refresh_access_token(self, refresh_token: str) -> dict:
@@ -57,14 +57,14 @@ class AuthService:
             user_id = payload.get("sub")
             if not user_id:
                 raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED, 
-                    detail="Invalid refresh payload"
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid refresh payload",
                 )
             return self.generate_auth_tokens(int(user_id))
         except jwt.InvalidTokenError:
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, 
-                detail="Invalid or expired refresh token."
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid or expired refresh token.",
             )
 
     async def blacklist_token(self, token: str, payload: dict) -> None:
@@ -73,6 +73,8 @@ class AuthService:
         ttl = int(exp_timestamp - now)
         if ttl > 0:
             try:
-                await self.redis.setex(name=f"blacklist:{token}", time=ttl, value="true")
+                await self.redis.setex(
+                    name=f"blacklist:{token}", time=ttl, value="true"
+                )
             except Exception as e:
                 print(f"Warning: Failed to blacklist token in Redis ({e})")

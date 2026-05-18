@@ -6,6 +6,7 @@ from src.api.routes import router as api_router
 from src.core.config import settings
 from src.db import connection
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup Context
@@ -16,11 +17,8 @@ async def lifespan(app: FastAPI):
     # Shutdown Context
     await connection.redis_client.close()
 
-app = FastAPI(
-    title=settings.PROJECT_NAME,
-    lifespan=lifespan,
-    version="1.0.0"
-)
+
+app = FastAPI(title=settings.PROJECT_NAME, lifespan=lifespan, version="1.0.0")
 
 # CORS Configuration
 app.add_middleware(

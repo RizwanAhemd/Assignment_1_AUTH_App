@@ -1,5 +1,5 @@
 from typing import AsyncGenerator, Optional
-from redis.asyncio import Redis, from_url
+from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from src.core.config import settings
 

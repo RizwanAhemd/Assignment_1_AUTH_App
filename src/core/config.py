@@ -1,6 +1,7 @@
-from typing import Any, Optional
+from typing import Optional
 from pydantic import PostgresDsn, RedisDsn, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 
 class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
@@ -57,7 +58,8 @@ class Settings(BaseSettings):
                     path=f"{self.REDIS_DB}",
                 )
             )
-            
+
         return self
+
 
 settings = Settings()
