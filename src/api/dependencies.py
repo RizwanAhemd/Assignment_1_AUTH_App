@@ -22,15 +22,19 @@ async def get_current_user(
     )
     
     # Check Blacklist Status
+    is_blacklisted = False
     try:
         if await redis.get(f"blacklist:{token}"):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Token revoked. Please login again."
-            )
+            is_blacklisted = True
     except Exception as e:
         # If Redis is down, we log it but continue (JWT is still valid cryptographically)
         print(f"Warning: Redis check failed ({e}). Proceeding with JWT validation only.")
+        
+    if is_blacklisted:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token revoked. Please login again."
+        )
 
     try:
         payload = decode_token(token, "access")
